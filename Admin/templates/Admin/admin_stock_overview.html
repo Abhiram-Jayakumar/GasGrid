@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas Stock Overview</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Gas Stock Overview</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Gas Name</th>
+                    <th>Category</th>
+                    <th>Total Added Quantity</th>
+                    <th>Total Sold to Agents</th>
+                    <th>Total Sold by Agents to Users</th>
+                    <th>Remaining Stock with Agents</th>
+                    <th>Remaining Stock in Admin Inventory</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if stock_data %}
+                    {% for stock in stock_data %}
+                    <tr>
+                        <td>{{ stock.gas.name }}</td>
+                        <td>{{ stock.gas.category }}</td>
+                        <td>{{ stock.total_added }}</td>
+                        <td>{{ stock.total_sold_to_agents }}</td>
+                        <td>{{ stock.total_sold_by_agents }}</td>
+                        <td>{{ stock.remaining_stock_with_agents }}</td>
+                        <td>{{ stock.remaining_stock_admin }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No stock data available.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

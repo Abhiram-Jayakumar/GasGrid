@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Gas </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Gas category List</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>weight</th>
+                    <th>Retailer Price</th>
+                    <th>Added On</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for gas in gas %}
+                <tr>
+                    <td>{{ gas.id }}</td>
+                    <td>{{ gas.name }}</td>
+                    <td>{{ gas.category }}</td>
+                    <td>{{ gas.quantity }}</td>
+                    <td>{{ gas.weight}}</td>
+                    <td>₹{{ gas.retailer_price }}</td>
+                    <td>{{ gas.added_on }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No gas products added yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{% url 'Admin:add_gas' %}" class="btn btn-primary mt-3">Add New Gas Product</a>
+    </div>
+</body>
+</html>

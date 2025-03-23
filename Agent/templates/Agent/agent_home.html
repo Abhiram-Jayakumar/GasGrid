@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent home</title>
+</head>
+<body>
+    <h1>Agent Home</h1>
+    <a href="{% url 'Agent:view_gas_products'%}">BOOK GAS</a>
+    <br>
+    <a href="{% url 'Agent:agent_bookings'%}">agent_bookings</a>
+    <br>
+    <a href="{% url 'Agent:agent_view_user_bookings'%}">agent_view_user_bookings</a>
+    <br>
+    <a href="{% url 'Agent:agent_stock_overview'%}">agent_stock_overview</a>
+    <br>
+    <a href="{% url 'Agent:agent_profile'%}">agent_profile</a>
+</body>
+</html>

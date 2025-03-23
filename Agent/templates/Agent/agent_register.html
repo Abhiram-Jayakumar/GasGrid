@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Registration</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRhhnbNUXPX9_JYKnroSAex2-1KFaSmwQ&libraries=places&callback=initAutocomplete" async defer></script>
+    <style>
+        #map { width: 100%; height: 400px; }
+    </style>
+</head>
+<body>
+
+    <h2>Agent Registration</h2>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Name:</label>
+        <input type="text" name="name" required><br>
+
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+
+        <label>Phone Number:</label>
+        <input type="text" name="phone_number" required><br>
+
+        <label>License Number:</label>
+        <input type="text" name="license_number" required><br>
+
+        <label>Agency Name:</label>
+        <input type="text" name="agency_name" required><br>
+
+        <label>Agency Start Year:</label>
+        <input type="number" name="agency_start_year" required><br>
+
+        <label>Profile Image:</label>
+        <input type="file" name="agent_image"><br>
+
+        <label>ID Proof:</label>
+        <input type="file" name="agent_idproof"><br>
+
+        <label>Address:</label>
+        <textarea name="address"></textarea><br>
+
+        <label>Select Location on Map:</label>
+        <input id="pac-input" class="controls" type="text" placeholder="Search location">
+        <div id="map"></div>
+        
+        <input type="hidden" id="l1" name="latitude" required>
+        <input type="hidden" id="l2" name="longitude" required>
+        
+        <label>Password:</label>
+        <input type="text" name="password" required><br>  <!-- Stored in plain text -->
+
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        let map;
+        let marker;
+
+        function initAutocomplete() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 10.1076, lng: 76.3457 },
+                zoom: 13
+            });
+
+            google.maps.event.addListener(map, "click", function (event) {
+                if (marker) {
+                    marker.setMap(null);
+                }
+                marker = new google.maps.Marker({
+                    position: event.latLng,
+                    map: map,
+                    draggable: true
+                });
+                updateCoordinates(event.latLng.lat(), event.latLng.lng());
+                
+                google.maps.event.addListener(marker, "dragend", function (event) {
+                    updateCoordinates(event.latLng.lat(), event.latLng.lng());
+                });
+            });
+
+            const input = document.getElementById("pac-input");
+            const searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+            
+            searchBox.addListener("places_changed", function () {
+                const places = searchBox.getPlaces();
+                if (places.length === 0) return;
+
+                if (marker) {
+                    marker.setMap(null);
+                }
+
+                const place = places[0];
+                marker = new google.maps.Marker({
+                    position: place.geometry.location,
+                    map: map,
+                    draggable: true
+                });
+                updateCoordinates(place.geometry.location.lat(), place.geometry.location.lng());
+            });
+        }
+
+        function updateCoordinates(lat, lng) {
+            document.getElementById("l1").value = lat;
+            document.getElementById("l2").value = lng;
+        }
+    </script>
+
+</body>
+</html>

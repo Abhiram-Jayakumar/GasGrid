@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin home</title>
+</head>
+<body>
+    <h1>Admin Home</h1>
+    <a href="{% url 'Admin:view_agents'%}">view_agents</a>
+    <br>
+    <a href="{% url 'Admin:add_gas'%}">add_gas</a>
+    <br>
+    <a href="{% url 'Admin:admin_view_agent_bookings'%}">admin_view_agent_bookings</a>
+    <br>
+    <a href="{% url 'Admin:admin_stock_overview' %}">Stock Overview</a>
+    <br>
+</body>
+</html>

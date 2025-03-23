@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Gas from Agents</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Available Gas from Agents</h2>
+
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Gas Name</th>
+                    <th>Category</th>
+                    <th>Agent</th>
+                    <th>Available Quantity</th>
+                    <th>Price per unit</th>
+                    <th>Book</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in agent_bookings %}
+                <tr>
+                    <td>{{ booking.gas_product.name }}</td>
+                    <td>{{ booking.gas_product.category }}</td>
+                    <td>{{ booking.agent.name }}</td>
+                    <td>{{ booking.quantity }}</td>
+                    <td>₹{{ booking.gas_product.retailer_price }}</td>
+                    <td>
+                        <a href="{% url 'User:user_book_gas' gas_id=booking.gas_product.id agent_id=booking.agent.id %}" class="btn btn-primary btn-sm">Book Now</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No gas available from agents.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

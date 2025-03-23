@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Agent Profile</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label>Name:</label>
+            <input type="text" name="name" class="form-control" value="{{ agent.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Email:</label>
+            <input type="email" name="email" class="form-control" value="{{ agent.email }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Phone Number:</label>
+            <input type="text" name="phone_number" class="form-control" value="{{ agent.phone_number }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>License Number:</label>
+            <input type="text" name="license_number" class="form-control" value="{{ agent.license_number }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Agency Name:</label>
+            <input type="text" name="agency_name" class="form-control" value="{{ agent.agency_name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Agency Start Year:</label>
+            <input type="number" name="agency_start_year" class="form-control" value="{{ agent.agency_start_year }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Address:</label>
+            <textarea name="address" class="form-control">{{ agent.address }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label>Agent Image:</label>
+            <input type="file" name="agent_image" class="form-control">
+            {% if agent.agent_image %}
+                <img src="{{ agent.agent_image.url }}" alt="Agent Image" width="100">
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label>Agent ID Proof:</label>
+            <input type="file" name="agent_idproof" class="form-control">
+            {% if agent.agent_idproof %}
+                <img src="{{ agent.agent_idproof.url }}" alt="Agent ID Proof" width="100">
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+
+    <a href="{% url 'Agent:update_password' %}" class="btn btn-warning mt-3">Change Password</a>
+</div>
+
+
+</body>
+</html>

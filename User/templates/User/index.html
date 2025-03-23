@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GASGRID - Commercial Gas Booking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #f8f9fa;
+            --accent-color: #34a853;
+            --text-color: #202124;
+            --light-text: #5f6368;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background-color: #0b5fca;
+            transform: translateY(-2px);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #1a73e8 0%, #34a853 100%);
+            color: white;
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .secondary-btn {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .secondary-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .features {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: var(--light-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card p {
+            color: var(--light-text);
+        }
+        
+        .booking-form {
+            padding: 80px 0;
+            background-color: var(--secondary-color);
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-submit {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .testimonials {
+            background-color: white;
+            padding: 80px 0;
+        }
+        
+        .testimonials-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-slide {
+            display: none;
+            animation: fadeEffect 1.5s;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .testimonial-slide.active {
+            display: block;
+        }
+        
+        @keyframes fadeEffect {
+            from {opacity: 0.4}
+            to {opacity: 1}
+        }
+        
+        .testimonial-content {
+            background-color: var(--secondary-color);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .testimonial-content::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--secondary-color);
+        }
+        
+        .testimonial-content p {
+            font-style: italic;
+            font-size: 18px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .author-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            color: var(--light-text);
+        }
+        
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .testimonial-nav span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .testimonial-nav span.active {
+            background-color: var(--primary-color);
+        }
+        
+        .footer {
+            background-color: #202124;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-col h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #f8f9fa;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col a {
+            color: #dadce0;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-col a:hover {
+            color: var(--primary-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #333;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            color: #dadce0;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                margin-top: 20px;
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+                margin-left: 0;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading animation */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+            animation: modalAnimation 0.4s;
+        }
+        
+        @keyframes modalAnimation {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+        
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        
+        .pricing-plans {
+            padding: 80px 0;
+            background-color: var(--secondary-color);
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pricing-header {
+            padding: 30px;
+            text-align: center;
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .pricing-header h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-header .price {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-header .price span {
+            font-size: 18px;
+            font-weight: normal;
+        }
+        
+        .pricing-features {
+            padding: 30px;
+        }
+        
+        .pricing-features ul {
+            list-style: none;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pricing-features li i {
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+        
+        .pricing-cta {
+            text-align: center;
+            padding: 0 30px 30px;
+        }
+        
+        .map-container {
+            height: 400px;
+            background-color: #eee;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .map-overlay h3 {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+        
+        /* Extra animations */
+        .animation-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .animation-fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animation-delay-1 {
+            transition-delay: 0.2s;
+        }
+        
+        .animation-delay-2 {
+            transition-delay: 0.4s;
+        }
+        
+        .animation-delay-3 {
+            transition-delay: 0.6s;
+        }
+        
+        #gas-calculator {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        #results.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-fire"></i>GASGRID
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="{% url 'User:register_user'%}">Register - User</a></li>
+                    <li><a href="{% url 'Agent:register_agent'%}">Register - Agent</a></li>
+                    <li><a href="{% url 'User:login'%}">Login</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Efficient Commercial Gas Booking Solution</h1>
+                <p>Streamline your gas supply management with our advanced online booking system. Save time, reduce costs, and ensure uninterrupted gas supply for your business.</p>
+                <div class="cta-buttons">
+                    <button class="btn" id="demo-btn">Request Demo</button>
+                    <button class="btn secondary-btn" id="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title animation-fade-in">
+                <h2>Key Features</h2>
+                <p>Our comprehensive gas booking system is designed to meet all your commercial gas supply needs.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card animation-fade-in animation-delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Easy Scheduling</h3>
+                    <p>Book gas deliveries with just a few clicks and manage your schedule effortlessly.</p>
+                </div>
+                <div class="feature-card animation-fade-in animation-delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Consumption Analytics</h3>
+                    <p>Track your gas usage patterns and optimize your consumption with detailed analytics.</p>
+                </div>
+                <div class="feature-card animation-fade-in animation-delay-3">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Automated Alerts</h3>
+                    <p>Never run out of gas with timely notifications and automated reordering options.</p>
+                </div>
+                <div class="feature-card animation-fade-in animation-delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Access</h3>
+                    <p>Manage your gas supply on the go with our responsive mobile interface.</p>
+                </div>
+                <div class="feature-card animation-fade-in animation-delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Secure Payments</h3>
+                    <p>Multiple secure payment options with detailed billing history and reports.</p>
+                </div>
+                <div class="feature-card animation-fade-in animation-delay-3">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock customer support to assist you with any queries or emergencies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking" class="booking-form">
+        <div class="container">
+            <div class="section-title animation-fade-in">
+                <h2>Book Your Gas Supply</h2>
+                <p>Fill out the form below to schedule your next gas delivery.</p>
+            </div>
+            <div class="form-container animation-fade-in animation-delay-1">
+                <form id="gas-booking-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="company-name">Company Name</label>
+                            <input type="text" id="company-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="business-type">Business Type</label>
+                            <select id="business-type" required>
+                                <option value="">Select Business Type</option>
+                                <option value="restaurant">Restaurant</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="retail">Retail</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="contact-person">Contact Person</label>
+                            <input type="text" id="contact-person" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="gas-type">Gas Type</label>
+                            <select id="gas-type" required>
+                                <option value="">Select Gas Type</option>
+                                <option value="lpg">LPG</option>
+                                <option value="natural-gas">Natural Gas</option>
+                                <option value="cng">CNG</option>
+                                <option value="propane">Propane</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity (kg)</label>
+                            <input type="number" id="quantity" min="1" required>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="delivery-date">Preferred Delivery Date</label>
+                            <input type="date" id="delivery-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="delivery-time">Preferred Time Slot</label>
+                            <select id="delivery-time" required>
+                                <option value="">Select Time Slot</option>
+                                <option value="morning">Morning (8am - 12pm)</option>
+                                <option value="afternoon">Afternoon (12pm - 4pm)</option>
+                                <option value="evening">Evening (4pm - 8pm)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Delivery Address</label>
+                        <input type="text" id="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="special-instructions">Special Instructions (Optional)</label>
+                        <input type="text" id="special-instructions">
+                    </div>
+                    <div class="form-submit">
+                        <div class="loader" id="form-loader"></div>
+                        <button type="submit" class="btn" id="submit-btn">Book Now</button>
+                    </div>
+                </form>
+                
+                <div id="gas-calculator">
+                    <h3>Gas Consumption Calculator</h3>
+                    <p>Estimate your gas needs based on your business type and usage.</p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="calc-business-type">Business Type</label>
+                            <select id="calc-business-type">
+                                <option value="restaurant">Restaurant</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="retail">Retail</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="calc-hours">Operating Hours per Day</label>
+                            <input type="number" id="calc-hours" min="1" max="24" value="8">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="calc-size">Business Size (sq ft)</label>
+                            <input type="number" id="calc-size" min="100" value="1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="calc-devices">Number of Gas Appliances</label>
+                            <input type="number" id="calc-devices" min="1" value="3">
+                        </div>
+                    </div>
+                    <button class="btn" id="calculate-btn">Calculate Consumption</button>
+                    
+                    <div id="results">
+                        <h4>Estimated Monthly Consumption</h4>
+                        <p id="result-text"></p>
+                        <p id="recommendation"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing-plans">
+        <div class="container">
+            <div class="section-title animation-fade-in">
+                <h2>Pricing Plans</h2>
+                <p>Choose the plan that best suits your business needs.</p>
+            </div>
+            <div class="pricing-cards">
+                <div class="pricing-card animation-fade-in animation-delay-1">
+                    <div class="pricing-header">
+                        <h3>Standard</h3>
+                        <div class="price">$299<span>/month</span></div>
+                        <p>For small businesses</p>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Up to 200kg gas per month</li>
+                            <li><i class="fas fa-check"></i> Weekly delivery schedule</li>
+                            <li><i class="fas fa-check"></i> Basic consumption analytics</li>
+                            <li><i class="fas fa-check"></i> Email support</li>
+                            <li><i class="fas fa-times"></i> Priority delivery</li>
+                            <li><i class="fas fa-times"></i> Custom delivery schedule</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-cta">
+                        <button class="btn" onclick="showModal('standard')">Get Started</button>
+                    </div>
+                </div>
+                <div class="pricing-card animation-fade-in animation-delay-2">
+                    <div class="pricing-header" style="background-color: #34a853;">
+                        <h3>Premium</h3>
+                        <div class="price">$599<span>/month</span></div>
+                        <p>For medium businesses</p>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Up to 500kg gas per month</li>
+                            <li><i class="fas fa-check"></i> Bi-weekly delivery schedule</li>
+                            <li><i class="fas fa-check"></i> Advanced consumption analytics</li>
+                            <li><i class="fas fa-check"></i> 24/7 phone support</li>
+                            <li><i class="fas fa-check"></i> Priority delivery</li>
+                            <li><i class="fas fa-times"></i> Custom delivery schedule</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-cta">
+                        <button class="btn" onclick="showModal('premium')">Get Started</button>
+                    </div>
+                </div>
+                <div class="pricing-card animation-fade-in animation-delay-3">
+                    <div class="pricing-header" style="background-color: #ea4335;">
+                        <h3>Enterprise</h3>
+                        <div class="price">$999<span>/month</span></div>
+                        <p>For large businesses</p>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Unlimited gas supply</li>
+                            <li><i class="fas fa-check"></i> Custom delivery schedule</li>
+                            <li><i class="fas fa-check"></i> Real-time consumption analytics</li>
+                            <li><i class="fas fa-check"></i> Dedicated account manager</li>
+                            <li><i class="fas fa-check"></i> Priority emergency delivery</li>
+                            <li><i class="fas fa-check"></i> Custom integration solutions</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-cta">
+                        <button class="btn" onclick="showModal('enterprise')">Get Started</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-title animation-fade-in">
+                <h2>What Our Clients Say</h2>
+                <p>Don't just take our word for it. See what our satisfied customers have to say.</p>
+            </div>
+            <div class="testimonials-slider">
+                <div class="testimonial-slide active">
+                    <div class="testimonial-content">
+                        <p>"GASGRID has revolutionized our gas management. We've reduced our gas costs by 15% and eliminated supply disruptions completely."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="/api/placeholder/60/60" alt="Customer">
+                        </div>
+                        <div class="author-info">
+                            <h4>John Smith</h4>
+                            <p>Executive Chef, Gourmet Restaurant</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <p>"The automated scheduling and delivery confirmation have saved us countless hours of administrative work. Highly recommended for any business."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="/api/placeholder/60/60" alt="Customer">
+                        </div>
+                        <div class="author-info">
+                            <h4>Sarah Johnson</h4>
+                            <p>Operations Manager, Grand Hotel</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <p>"The analytics dashboard has given us insights we never had before. We've optimized our usage patterns and reduced waste significantly."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="/api/placeholder/60/60" alt="Customer">
+                        </div>
+                        <div class="author-info">
+                            <h4>Michael Wong</h4>
+                            <p>Facility Director, Manufacturing Inc.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-nav">
+                    <span class="active" onclick="currentSlide(1)"></span>
+                    <span onclick="currentSlide(2)"></span>
+                    <span onclick="currentSlide(3)"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="contact">
+        <div class="map-container">
+            <div class="map-overlay">
+                <div>
+                    <h3>Find Us</h3>
+                    <p>Our distribution centers are located nationwide to serve you better.</p>
+                    <button class="btn" id="view-locations">View Locations</button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="section-title animation-fade-in">
+                <h2>Contact Us</h2>
+                <p>Have questions? Our team is here to help you.</p>
+            </div>
+            <div class="form-container animation-fade-in animation-delay-1">
+                <form id="contact-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="contact-name">Your Name</label>
+                            <input type="text" id="contact-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">Email Address</label>
+                            <input type="email" id="contact-email" required>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="contact-phone">Phone Number</label>
+                            <input type="tel" id="contact-phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="inquiry-type">Inquiry Type</label>
+                            <select id="inquiry-type">
+                                <option value="general">General Inquiry</option>
+                                <option value="sales">Sales</option>
+                                <option value="support">Technical Support</option>
+                                <option value="billing">Billing</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <input type="text" id="message" required>
+                    </div>
+                    <div class="form-submit">
+                        <button type="submit" class="btn">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>GASGRID</h3>
+                    <p>Your reliable partner for commercial gas supply management.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="{% url 'User:register_user'%}">Register - User</a></li>
+                        <li><a href="{% url 'Agent:register_agent'%}">Register - Agent</a></li>
+                        <li><a href="{% url 'User:login'%}">Login</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Gas Supply</a></li>
+                        <li><a href="#">Bulk Ordering</a></li>
+                        <li><a href="#">Emergency Delivery</a></li>
+                        <li><a href="#">Equipment Rental</a></li>
+                        <li><a href="#">Consultation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Business Avenue, Industrial District</li>
+                        <li><i class="fas fa-phone"></i> +1 (800) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@gasgrid.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8am-6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 GASGRID. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Request Information</h2>
+            <p id="modal-description">Please fill out the form below to get more information about our services.</p>
+            <form id="modal-form">
+                <div class="form-group">
+                    <label for="modal-name">Your Name</label>
+                    <input type="text" id="modal-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-email">Email Address</label>
+                    <input type="email" id="modal-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-phone">Phone Number</label>
+                    <input type="tel" id="modal-phone">
+                </div>
+                <div class="form-group">
+                    <label for="modal-company">Company Name</label>
+                    <input type="text" id="modal-company" required>
+                </div>
+                <div class="form-submit">
+                    <button type="submit" class="btn">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Scroll animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Show animations when scrolling
+            const animatedElements = document.querySelectorAll('.animation-fade-in');
+            
+            function checkIfInView() {
+                const windowHeight = window.innerHeight;
+                const windowTopPosition = window.scrollY;
+                const windowBottomPosition = windowTopPosition + windowHeight;
+                
+                animatedElements.forEach(element => {
+                    const elementHeight = element.offsetHeight;
+                    const elementTopPosition = element.offsetTop;
+                    const elementBottomPosition = elementTopPosition + elementHeight;
+                    
+                    if ((elementBottomPosition >= windowTopPosition) && 
+                        (elementTopPosition <= windowBottomPosition)) {
+                        element.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkIfInView);
+            window.addEventListener('resize', checkIfInView);
+            
+            // Trigger initial check
+            checkIfInView();
+            
+            // Testimonial slider
+            let slideIndex = 1;
+            showSlides(slideIndex);
+            
+            window.currentSlide = function(n) {
+                showSlides(slideIndex = n);
+            };
+            
+            function showSlides(n) {
+                let i;
+                let slides = document.getElementsByClassName("testimonial-slide");
+                let dots = document.getElementsByClassName("testimonial-nav")[0].getElementsByTagName("span");
+                
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                    slides[i].classList.remove("active");
+                }
+                
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].classList.remove("active");
+                }
+                
+                slides[slideIndex-1].style.display = "block";
+                slides[slideIndex-1].classList.add("active");
+                dots[slideIndex-1].classList.add("active");
+            }
+            
+            // Auto-rotate testimonials
+            setInterval(function() {
+                slideIndex++;
+                if (slideIndex > document.getElementsByClassName("testimonial-slide").length) {
+                    slideIndex = 1;
+                }
+                showSlides(slideIndex);
+            }, 5000);
+            
+            // Form submission
+            const bookingForm = document.getElementById('gas-booking-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const formLoader = document.getElementById('form-loader');
+            
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Show loader
+                    submitBtn.style.display = 'none';
+                    formLoader.style.display = 'block';
+                    
+                    // Simulate form submission
+                    setTimeout(function() {
+                        formLoader.style.display = 'none';
+                        submitBtn.style.display = 'block';
+                        
+                        // Show success message
+                        alert('Your gas booking has been submitted successfully! Our team will contact you shortly.');
+                        
+                        // Reset form
+                        bookingForm.reset();
+                    }, 2000);
+                });
+            }
+            
+            // Contact form
+            const contactForm = document.getElementById('contact-form');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Thank you for your message! We will get back to you soon.');
+                    contactForm.reset();
+                });
+            }
+            
+            // Modal functionality
+            const modal = document.getElementById('modal');
+            const closeBtn = document.querySelector('.close-btn');
+            const modalForm = document.getElementById('modal-form');
+            
+            window.showModal = function(plan) {
+                const modalTitle = document.getElementById('modal-title');
+                const modalDescription = document.getElementById('modal-description');
+                
+                // Set modal content based on plan
+                if (plan === 'standard') {
+                    modalTitle.innerText = 'Standard Plan';
+                    modalDescription.innerText = 'Get started with our Standard plan for small businesses.';
+                } else if (plan === 'premium') {
+                    modalTitle.innerText = 'Premium Plan';
+                    modalDescription.innerText = 'Upgrade to our Premium plan for medium-sized businesses.';
+                } else if (plan === 'enterprise') {
+                    modalTitle.innerText = 'Enterprise Plan';
+                    modalDescription.innerText = 'Custom solutions for large businesses with our Enterprise plan.';
+                }
+                
+                modal.style.display = 'block';
+            };
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                });
+            }
+            
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            if (modalForm) {
+                modalForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Thank you for your interest! Our team will contact you with more information.');
+                    modalForm.reset();
+                    modal.style.display = 'none';
+                });
+            }
+            
+            // Gas consumption calculator
+            const calculateBtn = document.getElementById('calculate-btn');
+            const results = document.getElementById('results');
+            const resultText = document.getElementById('result-text');
+            const recommendation = document.getElementById('recommendation');
+            
+            if (calculateBtn) {
+                calculateBtn.addEventListener('click', function() {
+                    const businessType = document.getElementById('calc-business-type').value;
+                    const hours = parseInt(document.getElementById('calc-hours').value);
+                    const size = parseInt(document.getElementById('calc-size').value);
+                    const devices = parseInt(document.getElementById('calc-devices').value);
+                    
+                    // Simple calculation formula (for demonstration)
+                    let baseConsumption = 0;
+                    
+                    switch(businessType) {
+                        case 'restaurant':
+                            baseConsumption = 15;
+                            break;
+                        case 'hotel':
+                            baseConsumption = 12;
+                            break;
+                        case 'manufacturing':
+                            baseConsumption = 20;
+                            break;
+                        case 'retail':
+                            baseConsumption = 8;
+                            break;
+                        default:
+                            baseConsumption = 10;
+                    }
+                    
+                    const monthlyConsumption = baseConsumption * devices * (hours/8) * (size/1000) * 30;
+                    
+                    resultText.innerText = `Based on your inputs, your estimated monthly gas consumption is approximately ${monthlyConsumption.toFixed(2)} kg.`;
+                    
+                    // Recommend a plan
+                    let recommendedPlan = '';
+                    if (monthlyConsumption < 200) {
+                        recommendedPlan = 'Standard Plan';
+                    } else if (monthlyConsumption < 500) {
+                        recommendedPlan = 'Premium Plan';
+                    } else {
+                        recommendedPlan = 'Enterprise Plan';
+                    }
+                    
+                    recommendation.innerText = `We recommend our ${recommendedPlan} for your business needs.`;
+                    
+                    results.classList.add('active');
+                });
+            }
+            
+            // Demo button
+            const demoBtn = document.getElementById('demo-btn');
+            if (demoBtn) {
+                demoBtn.addEventListener('click', function() {
+                    showModal('demo');
+                });
+            }
+            
+            // Learn more button
+            const learnMoreBtn = document.getElementById('learn-more-btn');
+            if (learnMoreBtn) {
+                learnMoreBtn.addEventListener('click', function() {
+                    document.querySelector('#features').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // View locations button
+            const viewLocationsBtn = document.getElementById('view-locations');
+            if (viewLocationsBtn) {
+                viewLocationsBtn.addEventListener('click', function() {
+                    alert('Our distribution centers are located in: New York, Chicago, Los Angeles, Houston, and Miami.');
+                });
+            }
+        });
+    </script>
+    </body>
+    </html>

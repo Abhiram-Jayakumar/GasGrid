@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Gas from Agent</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Book Gas from {{ agent.name }}</h2>
+
+        <!-- Display Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="card p-4">
+            <h4>Gas Name: {{ gas_product.name }}</h4>
+            <p><strong>Category:</strong> {{ gas_product.category }}</p>
+            <p><strong>Available from Agent:</strong> <span id="available-qty">{{ agent_booking.quantity }}</span></p>
+            <p><strong>Weight:</strong> {{ gas_product.weight }}</p>
+            <p><strong>Price per unit:</strong> ₹{{ gas_product.retailer_price }}</p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Enter Quantity</label>
+                    <input type="number" id="quantity" name="quantity" class="form-control" min="1" max="{{ agent_booking.quantity }}" required>
+                </div>
+
+                <button type="submit" class="btn btn-success">Confirm Booking</button>
+                <a href="{% url 'User:view_agent_gas' %}" class="btn btn-secondary">Back</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("quantity").addEventListener("input", function() {
+            let maxQty = parseInt(this.max);
+            if (parseInt(this.value) > maxQty) {
+                alert("Quantity exceeds available stock!");
+                this.value = maxQty;
+            }
+        });
+    </script>
+
+</body>
+</html>

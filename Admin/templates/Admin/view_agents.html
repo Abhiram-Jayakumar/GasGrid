@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Agents</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container mt-4">
+        <h2 class="text-center">All Agents</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>License Number</th>
+                    <th>Agency Name</th>
+                    <th>Start Year</th>
+                    <th>Profile Image</th>
+                    <th>ID Proof</th>
+                    <th>Address</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Approval Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for agent in agents %}
+                <tr>
+                    <td>{{ agent.id }}</td>
+                    <td>{{ agent.name }}</td>
+                    <td>{{ agent.email }}</td>
+                    <td>{{ agent.phone_number }}</td>
+                    <td>{{ agent.license_number }}</td>
+                    <td>{{ agent.agency_name }}</td>
+                    <td>{{ agent.agency_start_year }}</td>
+                    <td>
+                        {% if agent.agent_image %}
+                            <img src="{{ agent.agent_image.url }}" alt="Profile Image" width="50">
+                        {% else %}
+                            <span class="text-muted">No Image</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if agent.agent_idproof %}
+                            <img src="{{ agent.agent_idproof.url }}" target="_blank" class="btn btn-info btn-sm">
+                        {% else %}
+                            <span class="text-muted">No ID Proof</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ agent.address }}</td>
+                    <td>{{ agent.latitude }}</td>
+                    <td>{{ agent.longitude }}</td>
+                    <td>
+                        {% if agent.agent_approved_status == 1 %}
+                            <span class="badge bg-success">Approved</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if agent.agent_approved_status == 0 %}
+                            <a href="{% url 'Admin:approve_agent' agent.id %}" class="btn btn-success btn-sm">Approve</a>
+                            <a href="{% url 'Admin:reject_agent' agent.id %}" class="btn btn-danger btn-sm">Reject</a>
+                        {% else %}
+                            <span class="text-muted">Already Approved</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

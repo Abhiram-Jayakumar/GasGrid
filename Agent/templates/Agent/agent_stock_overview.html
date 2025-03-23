@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-3">Agent Stock Overview</h2>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Gas Name</th>
+                <th>Category</th>
+                <th>Total Booked from Admin</th>
+                <th>Total Sold to Users</th>
+                <th>Remaining Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stock_data %}
+            <tr>
+                <td>{{ stock.gas.name }}</td>
+                <td>{{ stock.gas.category }}</td>
+                <td>{{ stock.total_booked }}</td>
+                <td>{{ stock.total_sold }}</td>
+                <td>{{ stock.remaining_stock }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">No stock data available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>
