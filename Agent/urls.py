@@ -13,5 +13,9 @@ urlpatterns = [
      path("agent/bookings/", views.agent_view_user_bookings, name="agent_view_user_bookings"),
      path("stock-overview/", views.agent_stock_overview, name="agent_stock_overview"),
      path("profile/", views.agent_profile_view, name="agent_profile"),
-    path("update-password/",views. update_password, name="update_password"),
+     path("update-password/",views. update_password, name="update_password"),
+     path("add-gas-product/", views.add_gas_product, name="add_gas_product"),
+     path("agent_added_products/", views.agent_added_products, name="agent_added_products"),
+     path("bookings/",views.agent_product_bookings, name="agent_product_bookings"),
+     path("products/edit/<int:product_id>/", views.edit_gas_product, name="edit_gas_product"),
 ]

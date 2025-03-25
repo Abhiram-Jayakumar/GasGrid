@@ -1,11 +1,13 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from Admin.models import Gas
-from Agent.models import Agent, GasBookAgent
-from User.models import UserBookGas
+from Agent.models import Agent, GasBookAgent, GasProduct
+from User.models import UserBookGas, UserProductBooking
 from django.db.models import F, ExpressionWrapper, DecimalField
 from django.db.models import Sum
 from django.core.files.storage import default_storage
+from django.contrib import messages
+from decimal import Decimal
 
 
 def register_agent(request):
@@ -70,7 +72,7 @@ def book_gas_product(request, gas_id):
         messages.error(request, "You must be logged in as an agent!")
         return redirect("Agent:agent_login")
 
-    agent = Agent.objects.get(id=request.session['agid'])  # Fetch logged-in agent
+    agent = Agent.objects.get(id=request.session['agid']) 
     gas_product = Gas.objects.get(id=gas_id)
 
     if request.method == "POST":
@@ -86,11 +88,9 @@ def book_gas_product(request, gas_id):
         
         total_price = requested_quantity * gas_product.retailer_price  
 
-        # Reduce stock
         gas_product.quantity -= requested_quantity
         gas_product.save()
 
-        # Store the booking record
         GasBookAgent.objects.create(
             agent=agent,
             gas_product=gas_product,
@@ -122,9 +122,8 @@ def agent_payment_page(request, booking_id):
     booking = GasBookAgent.objects.get(id=booking_id)
 
     if request.method == "POST":
-        # Assume payment is successful (For real payments, integrate Razorpay/Stripe)
         booking.payment_status = "Paid"
-        booking.booking_status = "Confirmed"  # Update booking status after payment
+        booking.booking_status = "Confirmed"  
         booking.save()
         messages.success(request, "Payment successful! Your booking is now confirmed.")
         return redirect("Agent:agent_bookings")
@@ -137,11 +136,9 @@ def agent_payment_page(request, booking_id):
 def agent_view_user_bookings(request):
     if 'agid' not in request.session:
         messages.error(request, "You must be logged in as an agent!")
-        return redirect("User:login")  # Redirects to user loginKW
-
+        return redirect("User:login")  
     agent = Agent.objects.get(id=request.session['agid'])
 
-    # Fetch bookings related to this agent & calculate total price dynamically
     user_bookings = (
         UserBookGas.objects.filter(agent=agent)
         .select_related("user", "gas_product")
@@ -165,8 +162,7 @@ def agent_view_user_bookings(request):
         except UserBookGas.DoesNotExist:
             messages.error(request, "Invalid booking ID!")
 
-        return redirect("Agent:agent_view_user_bookings")  # Reload page after update
-
+        return redirect("Agent:agent_view_user_bookings") 
     return render(request, "Agent/agent_view_user_bookings.html", {"user_bookings": user_bookings})
 
 
@@ -179,7 +175,6 @@ def agent_stock_overview(request):
 
     agent_id = request.session['agid']
     
-    # Get all gas products booked by the agent
     agent_gas_bookings = GasBookAgent.objects.filter(agent_id=agent_id).select_related("gas_product")
 
     stock_data = []
@@ -187,13 +182,10 @@ def agent_stock_overview(request):
     for booking in agent_gas_bookings:
         gas = booking.gas_product
 
-        # Total gas booked from admin
         total_booked_from_admin = GasBookAgent.objects.filter(agent=booking.agent, gas_product=gas).aggregate(Sum("quantity"))["quantity__sum"] or 0
 
-        # Total gas sold to users
         total_sold_to_users = UserBookGas.objects.filter(agent=booking.agent, gas_product=gas).aggregate(Sum("quantity"))["quantity__sum"] or 0
 
-        # Remaining stock with the agent
         remaining_stock = total_booked_from_admin - total_sold_to_users
 
         stock_data.append({
@@ -229,12 +221,12 @@ def agent_profile_view(request):
 
         if "agent_image" in request.FILES:
             if agent.agent_image:
-                default_storage.delete(agent.agent_image.path)  # Delete old image
+                default_storage.delete(agent.agent_image.path) 
             agent.agent_image = request.FILES["agent_image"]
 
         if "agent_idproof" in request.FILES:
             if agent.agent_idproof:
-                default_storage.delete(agent.agent_idproof.path)  # Delete old ID proof
+                default_storage.delete(agent.agent_idproof.path) 
             agent.agent_idproof = request.FILES["agent_idproof"]
 
         agent.save()
@@ -242,6 +234,8 @@ def agent_profile_view(request):
         return redirect("Agent:agent_profile")
 
     return render(request, "Agent/agent_profile.html", {"agent": agent})
+
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 def update_password(request):
     if 'agid' not in request.session:
@@ -256,7 +250,6 @@ def update_password(request):
         new_password = request.POST.get("new_password")
         confirm_password = request.POST.get("confirm_password")
 
-        # Check if current password matches the stored password
         if agent.password != current_password:
             messages.error(request, "Current password is incorrect.")
             return redirect("Agent:update_password")
@@ -265,10 +258,111 @@ def update_password(request):
             messages.error(request, "New password and confirm password do not match.")
             return redirect("Agent:update_password")
 
-        # Store new password without hashing (⚠️ Not Secure)
         agent.password = new_password
         agent.save()
         messages.success(request, "Password updated successfully.")
         return redirect("Agent:agent_profile")
 
     return render(request, "Agent/update_password.html")
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+def add_gas_product(request):
+    if 'agid' not in request.session:
+        messages.error(request, "You must be logged in as an agent!")
+        return redirect("Agent:login")
+
+    agent = Agent.objects.get(id=request.session['agid']) 
+
+    if request.method == "POST":
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        quantity_available = request.POST.get("quantity_available")
+        price = request.POST.get("price")
+        image = request.FILES.get("image")
+
+        if not all([name, description, quantity_available, price]):
+            messages.error(request, "All fields except the image are required!")
+            return redirect("Agent:add_gas_product")
+
+        gas_product = GasProduct(
+            agent=agent,
+            name=name,
+            description=description,
+            quantity_available=quantity_available,
+            price=price,
+            image=image
+        )
+        gas_product.save()
+
+        messages.success(request, "Gas product added successfully!")
+        return redirect("Agent:agent_added_products")
+
+    return render(request, "Agent/add_gas_product.html")
+
+#//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+def agent_added_products(request):
+    if 'agid' not in request.session:
+        messages.error(request, "You must be logged in as an agent!")
+        return redirect("Agent:login")
+
+    agent = Agent.objects.get(id=request.session['agid'])
+    gas_products = GasProduct.objects.filter(agent=agent)
+
+    return render(request, "Agent/agent_addedprocts.html", {"gas_products": gas_products})
+
+#////////////////////////////////////////////////////////////////////////////////////////////
+
+def agent_product_bookings(request):
+    if 'agid' not in request.session:
+        messages.error(request, "You must be logged in as an agent!")
+        return redirect("Agent:login")
+
+    agent = Agent.objects.get(id=request.session['agid'])
+    bookings = UserProductBooking.objects.filter(agent=agent)
+    products = GasProduct.objects.filter(agent=agent)
+
+    return render(request, "Agent/agent_product_bookings.html", {"bookings": bookings, "products": products})
+
+
+#///////////////////////////////////////////////////////////////////////////////////////////////////
+
+def edit_gas_product(request, product_id):
+    if 'agid' not in request.session:
+        messages.error(request, "You must be logged in as an agent!")
+        return redirect("Agent:login")
+
+    product = get_object_or_404(GasProduct, id=product_id, agent_id=request.session['agid'])
+
+    if request.method == "POST":
+        product.name = request.POST.get("name")
+        product.description = request.POST.get("description")
+        
+        quantity = request.POST.get("quantity")
+        if quantity is None or quantity.strip() == "":
+            messages.error(request, "Quantity cannot be empty!")
+            return redirect("Agent:edit_gas_product", product_id=product.id)
+        try:
+            product.quantity_available = int(quantity)
+        except ValueError:
+            messages.error(request, "Quantity must be a number!")
+            return redirect("Agent:edit_gas_product", product_id=product.id)
+
+        price = request.POST.get("price")
+        try:
+            product.price = Decimal(price)
+        except:
+            messages.error(request, "Invalid price format!")
+            return redirect("Agent:edit_gas_product", product_id=product.id)
+
+        if "image" in request.FILES:
+            product.image = request.FILES["image"]
+
+        product.save(update_fields=["name", "description", "quantity_available", "price", "image"])
+
+        messages.success(request, "Product updated successfully!")
+        return redirect("Agent:agent_added_products")  
+
+    return render(request, "Agent/agent_edit_product.html", {"product": product})

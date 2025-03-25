@@ -15,4 +15,9 @@ urlpatterns = [
     path("profile/",views. user_profile, name="user_profile"),
     path("update-profile/", views.update_profile, name="update_profile"),
     path("update-password/", views.update_password, name="update_password"),
+    path("gas-products/", views.list_gas_products, name="list_gas_products"),
+    path("gas-products/<int:product_id>/", views.product_details, name="product_details"),
+    path("book-product/<int:product_id>/",views.book_gas_product, name="book_gas_product"),
+    path("user_product_bookings/",views. user_product_bookings, name="user_product_bookings"),
+    path("pay-now/<int:booking_id>/",views. pay_now, name="pay_now"),
 ]

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add gas product</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Add Gas Product</h2>
+        <div class="card mx-auto" style="max-width: 600px;">
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Product Name:</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description:</label>
+                        <textarea name="description" class="form-control" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Product Image:</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quantity Available:</label>
+                        <input type="number" name="quantity_available" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price:</label>
+                        <input type="number" step="0.01" name="price" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

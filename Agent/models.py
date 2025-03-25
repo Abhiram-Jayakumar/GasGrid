@@ -43,3 +43,13 @@ class GasBookAgent(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Total cost
     payment_status = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default="Pending")  # Payment status
     booking_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")  # Booking status
+
+
+class GasProduct(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)  # Agent who adds the product
+    name = models.CharField(max_length=200, unique=True)  # Product name
+    description = models.TextField()  # Product description
+    image = models.ImageField(upload_to="gas_products/", blank=True, null=True)  # Product image
+    quantity_available = models.PositiveIntegerField(default=0)  # Available quantity
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Product price per unit
+    date_added = models.DateTimeField(auto_now_add=True)  # Auto timestamp

@@ -1,9 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 
 from Admin.models import Admintable, Gas
-from Agent.models import Agent, GasBookAgent
-from User.models import User, UserBookGas
+from Agent.models import Agent, GasBookAgent, GasProduct
+from User.models import User, UserBookGas, UserProductBooking
 # Create your views here.
 
 
@@ -237,3 +237,81 @@ def update_password(request):
         return redirect("User:user_profile")
 
     return render(request, "User/update_password.html")
+
+#/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+def list_gas_products(request):
+    products = GasProduct.objects.all()
+    return render(request, "User/list_gas_products.html", {"products": products})
+
+
+def product_details(request, product_id):
+    product = get_object_or_404(GasProduct, id=product_id)
+    return render(request, "User/product_details.html", {"product": product})
+
+
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+def book_gas_product(request, product_id):
+    if 'uid' not in request.session:
+        messages.error(request, "You must be logged in to book a product!")
+        return redirect("User:login")
+
+    product = get_object_or_404(GasProduct, id=product_id)
+    user = User.objects.get(id=request.session['uid'])
+    agent = product.agent
+
+    if request.method == "POST":
+        quantity = int(request.POST.get("quantity"))
+        
+        if quantity <= 0 or quantity > product.quantity_available:
+            messages.error(request, "Invalid quantity selected!")
+            return redirect("User:product_details", product_id=product_id)
+
+        # Create booking entry
+        booking = UserProductBooking.objects.create(
+            user=user,
+            agent=agent,
+            gas_product=product,
+            quantity=quantity,
+            booking_status="Pending",
+            payment_status="Pending"
+        )
+
+        # Reduce stock quantity
+        product.quantity_available -= quantity
+        product.save()
+
+        messages.success(request, "Product booked successfully!")
+        return redirect("User:user_product_bookings")  # Redirect to user's bookings page
+
+    return render(request, "User/book_gas_product.html", {"product": product})
+
+
+#///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+def user_product_bookings(request):
+    if 'uid' not in request.session:
+        messages.error(request, "You must be logged in to view your bookings!")
+        return redirect("User:login")
+
+    user = User.objects.get(id=request.session['uid'])
+    bookings = UserProductBooking.objects.filter(user=user)
+
+    return render(request, "User/user_bookings.html", {"bookings": bookings})
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+def pay_now(request, booking_id):
+    booking = get_object_or_404(UserProductBooking, id=booking_id, user_id=request.session['uid'])
+
+    if request.method == "POST":
+        # Simulating a successful payment (You can integrate Razorpay, Stripe, or PayPal here)
+        booking.payment_status = "Paid"
+        booking.save()
+        messages.success(request, "Payment successful! Your order is confirmed.")
+        return redirect("User:user_product_bookings")
+
+    return render(request, "User/payment_page4product.html", {"booking": booking})

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2 class="text-center">My Bookings</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Agent</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Booking Status</th>
+                <th>Payment Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.gas_product.name }}</td>
+                <td>{{ booking.agent.agency_name }}</td>
+                <td>{{ booking.quantity }}</td>
+                <td>₹{{ booking.total_price }}</td>
+                <td>{{ booking.booking_status }}</td>
+                <td>
+                    {% if booking.payment_status == "Pending" %}
+                        <span class="text-danger">Pending</span>
+                    {% else %}
+                        <span class="text-success">Paid</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if booking.payment_status == "Pending" %}
+                        <a href="{% url 'User:pay_now' booking.id %}" class="btn btn-primary">Pay Now</a>
+                    {% else %}
+                        <span class="text-success">Paid</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No bookings found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>
