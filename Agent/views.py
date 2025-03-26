@@ -53,7 +53,12 @@ def register_agent(request):
 #/////////////////////////////////////////////////////////////////////////////////////////
 
 def agent_home(request):
-    return render(request, 'Agent/agent_home.html')
+    if 'agid' not in request.session:
+        messages.error(request, "You must be logged in!")
+        return redirect("User:login")
+
+    agent = Agent.objects.get(id=request.session['agid'])
+    return render(request, 'Agent/agent_home.html', {"agent": agent})
 
 #//////////////////////////////////////////////////////////////////////////////////////////
 
@@ -322,9 +327,9 @@ def agent_product_bookings(request):
 
     agent = Agent.objects.get(id=request.session['agid'])
     bookings = UserProductBooking.objects.filter(agent=agent)
-    products = GasProduct.objects.filter(agent=agent)
+   
 
-    return render(request, "Agent/agent_product_bookings.html", {"bookings": bookings, "products": products})
+    return render(request, "Agent/agent_product_bookings.html", {"bookings": bookings})
 
 
 #///////////////////////////////////////////////////////////////////////////////////////////////////

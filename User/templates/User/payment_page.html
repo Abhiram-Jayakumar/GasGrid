@@ -3,39 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment for Gas Booking</title>
+    <title>Secure Payment - GasGrid</title>
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --secondary-color: #34495E;
+            --accent-color: #3498DB;
+            --success-color: #27AE60;
+            --background-color: #ECF0F1;
+            --text-color: #2C3E50;
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 2rem auto;
+            overflow: hidden;
+        }
+
+        .payment-title {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            margin: -1.5rem -1.5rem 1.5rem;
+            border-bottom: 5px solid var(--accent-color);
+        }
+
+        .secure-badge {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-summary {
+            background: #F8FAFC;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        .summary-row.total {
+            border-top: 2px solid #E2E8F0;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .btn-pay {
+            background: var(--success-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-pay:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .btn-back {
+            background: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .payment-info {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-completed {
+            background: #DEF7EC;
+            color: #03543F;
+        }
+
+        .secure-note {
+            text-align: center;
+            color: #64748B;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        .timestamp {
+            color: #64748B;
+            font-size: 0.8rem;
+            text-align: right;
+            margin-top: 1rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <h2 class="text-center">Payment for Your Booking</h2>
-
+    <div class="container py-5">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             {% endfor %}
         {% endif %}
 
-        <div class="card p-4">
-            <h4>Gas Name: {{ booking.gas_product.name }}</h4>
-            <p><strong>Category:</strong> {{ booking.gas_product.category }}</p>
-            <p><strong>Agent:</strong> {{ booking.agent.name }}</p>
-            <p><strong>Quantity:</strong> {{ booking.quantity }}</p>
-            <p><strong>Total Price:</strong> ₹{{ total_price }}</p>
-            <p><strong>Booking Status:</strong> {{ booking.booking_status }}</p>
-            <p><strong>Payment Status:</strong> {{ booking.payment_status }}</p>
+        <div class="payment-header">
+            <h1><i class="fas fa-fire"></i> GasGrid</h1>
+        </div>
+
+        <div class="payment-card p-4">
+            <div class="payment-title">
+                <h2 class="mb-0">Secure Payment Gateway</h2>
+            </div>
+
+            <div class="secure-badge">
+                <i class="fas fa-lock me-2"></i> Secure Transaction
+            </div>
+
+            <div class="payment-info">
+                <h4>Order Information</h4>
+                <p class="mb-0">Transaction ID: #{{ booking.id }}</p>
+            </div>
+
+            <div class="order-summary">
+                <h5 class="mb-3">Order Summary</h5>
+                <div class="summary-row">
+                    <span>Product</span>
+                    <span>{{ booking.gas_product.name }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Category</span>
+                    <span>{{ booking.gas_product.category }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Agent</span>
+                    <span>{{ booking.agent.name }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Quantity</span>
+                    <span>{{ booking.quantity }} units</span>
+                </div>
+                <div class="summary-row">
+                    <span>Booking Status</span>
+                    <span class="status-badge {% if booking.booking_status == 'Pending' %}status-pending{% else %}status-completed{% endif %}">
+                        {{ booking.booking_status }}
+                    </span>
+                </div>
+                <div class="summary-row">
+                    <span>Payment Status</span>
+                    <span class="status-badge {% if booking.payment_status == 'Pending' %}status-pending{% else %}status-completed{% endif %}">
+                        {{ booking.payment_status }}
+                    </span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total Amount</span>
+                    <span>₹{{ total_price }}</span>
+                </div>
+            </div>
 
             {% if booking.payment_status == "Pending" %}
-                <form method="post">
+                <form method="post" class="mb-3">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-success">Pay Now</button>
+                    <button type="submit" class="btn btn-pay">
+                        <i class="fas fa-lock me-2"></i>Pay ₹{{ total_price }}
+                    </button>
                 </form>
             {% else %}
-                <p class="text-success">Payment Completed</p>
+                <div class="alert alert-success text-center mb-3">
+                    <i class="fas fa-check-circle me-2"></i>Payment Successfully Completed
+                </div>
             {% endif %}
 
-            <a href="{% url 'User:user_booking_details' %}" class="btn btn-secondary mt-2">View My Bookings</a>
+            <div class="text-center">
+                <a href="{% url 'User:user_booking_details' %}" class="btn btn-back">
+                    <i class="fas fa-arrow-left me-2"></i>Back to My Bookings
+                </a>
+            </div>
+
+            <div class="secure-note">
+                <i class="fas fa-shield-alt me-2"></i>
+                Your payment is secured with industry-standard encryption
+            </div>
+
+            <div class="timestamp">
+                Transaction Time: {{ current_date }}
+            </div>
         </div>
     </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Add animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentCard = document.querySelector('.payment-card');
+            paymentCard.style.opacity = '0';
+            paymentCard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                paymentCard.style.transition = 'all 0.5s ease';
+                paymentCard.style.opacity = '1';
+                paymentCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
 </body>
 </html>

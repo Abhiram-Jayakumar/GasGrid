@@ -3,35 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Update Profile - GasGrid</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff6b00;
+            --secondary-color: #4a4a4a;
+            --background-color: #f4f4f4;
+            --accent-color: #2196F3;
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, var(--primary-color), #ff9800);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .page-header {
+            background: linear-gradient(to right, var(--primary-color), #ff9800);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .edit-profile-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .card-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: none;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-label {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 0, 0.25);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .file-upload .form-control {
+            padding-left: 40px;
+        }
+
+        .file-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--primary-color);
+        }
+
+        .btn-save {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 500;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            background: #ff9800;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 500;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #666;
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+
+        .form-control {
+            padding-left: 40px;
+        }
+
+        .form-floating > .form-control {
+            padding-left: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .edit-profile-card {
+                margin: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <h2 class="text-center">Update Profile</h2>
-        <div class="card mx-auto" style="max-width: 600px;">
-            <div class="card-body">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'User:user_home' %}">
+                <i class="fas fa-fire"></i> GasGrid
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'User:view_agent_gas' %}">
+                            <i class="fas fa-search"></i> View Gas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'User:list_gas_products' %}">
+                            <i class="fas fa-shopping-cart"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'User:user_booking_details' %}">
+                            <i class="fas fa-receipt"></i> Gas-Booking Details
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'User:user_product_bookings' %}">
+                            <i class="fas fa-history"></i> My Product Bookings
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i> Profile
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'User:user_profile' %}">View Profile</a></li>
+                            <li><a class="dropdown-item" href="">Edit Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'User:index' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h2 class="text-center mb-0">Update Profile</h2>
+        </div>
+    </div>
+
+    <!-- Edit Profile Form -->
+    <div class="container">
+        <div class="edit-profile-card">
+            <div class="form-container">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label">Name:</label>
+                    
+                    <div class="text-center mb-4">
+                        <img src="{{ user.profile_image.url }}" alt="Current Profile" class="preview-image" id="imagePreview">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <i class="fas fa-user input-icon"></i>
                         <input type="text" name="name" class="form-control" value="{{ user.name }}" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Phone Number:</label>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <i class="fas fa-phone input-icon"></i>
                         <input type="text" name="phone_number" class="form-control" value="{{ user.phone_number }}" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Address:</label>
-                        <textarea name="address" class="form-control">{{ user.address }}</textarea>
+
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <i class="fas fa-map-marker-alt input-icon"></i>
+                        <textarea name="address" class="form-control" rows="3">{{ user.address }}</textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Profile Image:</label>
-                        <input type="file" name="profile_image" class="form-control">
+
+                    <div class="form-group">
+                        <label class="form-label">Update Profile Image</label>
+                        <div class="file-upload">
+                            <i class="fas fa-camera file-icon"></i>
+                            <input type="file" name="profile_image" class="form-control" accept="image/*" onchange="previewImage(this)">
+                        </div>
+                        <small class="text-muted">Recommended size: 200x200 pixels</small>
                     </div>
-                    <button type="submit" class="btn btn-success">Save Changes</button>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                        <a href="{% url 'User:user_profile' %}" class="btn btn-cancel">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Image preview functionality
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Add animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileCard = document.querySelector('.edit-profile-card');
+            profileCard.style.opacity = '0';
+            profileCard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                profileCard.style.transition = 'all 0.5s ease';
+                profileCard.style.opacity = '1';
+                profileCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
 </body>
 </html>

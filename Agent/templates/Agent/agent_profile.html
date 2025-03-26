@@ -3,73 +3,417 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Agent Profile - GasGrid</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --secondary-color: #34495E;
+            --accent-color: #3498DB;
+            --success-color: #2ECC71;
+            --warning-color: #F1C40F;
+            --background-color: #ECF0F1;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ECF0F1 0%, #BDC3C7 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .page-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .profile-header {
+            background: var(--primary-color);
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            object-fit: cover;
+        }
+
+        .profile-image-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-image-upload:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-label {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 40px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 45px;
+            color: var(--secondary-color);
+        }
+
+        .btn-update {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .btn-update:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-change-password {
+            background: var(--warning-color);
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-change-password:hover {
+            background: #f39c12;
+            transform: translateY(-2px);
+        }
+
+        .document-preview {
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .document-preview img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .last-updated {
+            text-align: right;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-card {
+                margin: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<div class="container mt-4">
-    <h2>Agent Profile</h2>
-
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <div class="mb-3">
-            <label>Name:</label>
-            <input type="text" name="name" class="form-control" value="{{ agent.name }}" required>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'Agent:agent_home'%}">
+                <i class="fas fa-fire"></i> GasGrid Agent
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Agent:view_gas_products' %}">
+                            <i class="fas fa-shopping-cart"></i> Book Gas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Agent:agent_bookings' %}">
+                            <i class="fas fa-list"></i> My Bookings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Agent:agent_view_user_bookings' %}">
+                            <i class="fas fa-users"></i> User Bookings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Agent:agent_stock_overview' %}">
+                            <i class="fas fa-warehouse"></i> Stock Overview
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-store"></i> Products
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'Agent:add_gas_product' %}">Add Product</a></li>
+                            <li><a class="dropdown-item" href="{% url 'Agent:agent_added_products' %}">My Products</a></li>
+                            <li><a class="dropdown-item" href="{% url 'Agent:agent_product_bookings' %}">Product Bookings</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Agent:agent_profile' %}">
+                            <i class="fas fa-user-circle"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'User:index' %}">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <!-- Page Header -->
+        <div class="page-header text-center">
+            <h2><i class="fas fa-user-circle me-2"></i>Agent Profile</h2>
+            <p class="mb-0">Manage your profile information</p>
         </div>
 
-        <div class="mb-3">
-            <label>Email:</label>
-            <input type="email" name="email" class="form-control" value="{{ agent.email }}" required>
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-image-container">
+                    {% if agent.agent_image %}
+                        <img src="{{ agent.agent_image.url }}" alt="Profile" class="profile-image">
+                    {% else %}
+                        <div class="profile-image" style="background: #3498db; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user fa-3x" style="color: white;"></i>
+                        </div>
+                    {% endif %}
+                    <label for="agent_image" class="profile-image-upload">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                </div>
+                <h3 class="mt-3">{{ agent.name }}</h3>
+                <p class="mb-0">{{ agent.license_number }}</p>
+            </div>
+
+            <div class="profile-body">
+                <form method="post" enctype="multipart/form-data" id="profileForm">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-user"></i> Name</label>
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" name="name" class="form-control" value="{{ agent.name }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" name="email" class="form-control" value="{{ agent.email }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-phone"></i> Phone Number</label>
+                                <i class="fas fa-phone input-icon"></i>
+                                <input type="text" name="phone_number" class="form-control" value="{{ agent.phone_number }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-id-card"></i> License Number</label>
+                                <i class="fas fa-id-card input-icon"></i>
+                                <input type="text" name="license_number" class="form-control" value="{{ agent.license_number }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-store"></i> Agency Name</label>
+                                <i class="fas fa-store input-icon"></i>
+                                <input type="text" name="agency_name" class="form-control" value="{{ agent.agency_name }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-calendar"></i> Agency Start Year</label>
+                                <i class="fas fa-calendar input-icon"></i>
+                                <input type="number" name="agency_start_year" class="form-control" value="{{ agent.agency_start_year }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-map-marker-alt"></i> Address</label>
+                        <i class="fas fa-map-marker-alt input-icon"></i>
+                        <textarea name="address" class="form-control" rows="3">{{ agent.address }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-image"></i> Profile Image</label>
+                                <input type="file" name="agent_image" id="agent_image" class="form-control" accept="image/*">
+                                {% if agent.agent_image %}
+                                    <div class="document-preview">
+                                        <img src="{{ agent.agent_image.url }}" alt="Profile Image">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label"><i class="fas fa-id-card"></i> ID Proof</label>
+                                <input type="file" name="agent_idproof" class="form-control" accept="image/*">
+                                {% if agent.agent_idproof %}
+                                    <div class="document-preview">
+                                        <img src="{{ agent.agent_idproof.url }}" alt="ID Proof">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-update">
+                        <i class="fas fa-save me-2"></i>Update Profile
+                    </button>
+
+                    <a href="{% url 'Agent:update_password' %}" class="btn btn-change-password">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </a>
+
+                    <div class="last-updated">
+                        Last updated: {{ current_date }}
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
 
-        <div class="mb-3">
-            <label>Phone Number:</label>
-            <input type="text" name="phone_number" class="form-control" value="{{ agent.phone_number }}" required>
-        </div>
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
-        <div class="mb-3">
-            <label>License Number:</label>
-            <input type="text" name="license_number" class="form-control" value="{{ agent.license_number }}" required>
-        </div>
+    <script>
+        // Image preview functionality
+        function previewImage(input, previewElement) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (previewElement.tagName === 'IMG') {
+                        previewElement.src = e.target.result;
+                    } else {
+                        previewElement.style.backgroundImage = `url(${e.target.result})`;
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-        <div class="mb-3">
-            <label>Agency Name:</label>
-            <input type="text" name="agency_name" class="form-control" value="{{ agent.agency_name }}" required>
-        </div>
+        // Form submission animation
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            const button = this.querySelector('button[type="submit"]');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+            button.disabled = true;
+        });
 
-        <div class="mb-3">
-            <label>Agency Start Year:</label>
-            <input type="number" name="agency_start_year" class="form-control" value="{{ agent.agency_start_year }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Address:</label>
-            <textarea name="address" class="form-control">{{ agent.address }}</textarea>
-        </div>
-
-        <div class="mb-3">
-            <label>Agent Image:</label>
-            <input type="file" name="agent_image" class="form-control">
-            {% if agent.agent_image %}
-                <img src="{{ agent.agent_image.url }}" alt="Agent Image" width="100">
-            {% endif %}
-        </div>
-
-        <div class="mb-3">
-            <label>Agent ID Proof:</label>
-            <input type="file" name="agent_idproof" class="form-control">
-            {% if agent.agent_idproof %}
-                <img src="{{ agent.agent_idproof.url }}" alt="Agent ID Proof" width="100">
-            {% endif %}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update Profile</button>
-    </form>
-
-    <a href="{% url 'Agent:update_password' %}" class="btn btn-warning mt-3">Change Password</a>
-</div>
-
-
+        // Add animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileCard = document.querySelector('.profile-card');
+            profileCard.style.opacity = '0';
+            profileCard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                profileCard.style.transition = 'all 0.5s ease';
+                profileCard.style.opacity = '1';
+                profileCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
 </body>
 </html>

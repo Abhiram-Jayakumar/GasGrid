@@ -3,54 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Gas </title>
+    <title>Add Gas Product - GasGrid Admin</title>
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #283593;
+            --accent-color: #3949ab;
+            --success-color: #43a047;
+            --background-color: #f5f6fa;
+        }
+
+        body {
+            background: var(--background-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .add-gas-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card-header {
+            background: var(--primary-color);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .gas-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-label {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px 40px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 45px;
+            color: var(--secondary-color);
+        }
+
+        .btn-add {
+            background: var(--success-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 160, 71, 0.3);
+        }
+
+        .btn-view {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3);
+            color: white;
+        }
+
+        .category-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .badge-industrial { background: #ff9800; color: white; }
+        .badge-commercial { background: #2196f3; color: white; }
+        .badge-medical { background: #f44336; color: white; }
+
+        .last-updated {
+            text-align: right;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .add-gas-card {
+                margin: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <h2 class="text-center">Add Gas </h2>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'Admin:admin_home'%}">
+                    <i class="fas fa-fire"></i> GasGrid Admin
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'Admin:view_agents'%}">
+                                <i class="fas fa-users"></i> Agents
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'Admin:add_gas'%}">
+                                <i class="fas fa-gas-pump"></i> Add Gas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'Admin:view_gas'%}">
+                                <i class="fas fa-gas-pump"></i> view_gas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'Admin:admin_view_agent_bookings'%}">
+                                <i class="fas fa-clipboard-list"></i> Bookings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'Admin:admin_stock_overview' %}">
+                                <i class="fas fa-warehouse"></i> Stock
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-user-circle"></i> Admin!
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'User:index' %}">
+                                <i class="fa-solid fa-right-from-bracket"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
+    <div class="container mt-4">
+        <!-- Page Header -->
+        <div class="page-header text-center">
+            <h2><i class="fas fa-gas-pump me-2"></i>Add Gas Product</h2>
+            <p class="mb-0">Create a new gas product entry</p>
+        </div>
+
+        <!-- Messages -->
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>{{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
             {% endfor %}
         {% endif %}
 
-        <form method="post" action="">
-            {% csrf_token %}
-
-            <div class="mb-3">
-                <label class="form-label">Gas Name</label>
-                <input type="text" name="name" class="form-control" required>
+        <!-- Add Gas Form Card -->
+        <div class="add-gas-card">
+            <div class="card-header text-white">
+                <div class="gas-icon">
+                    <i class="fas fa-fire fa-2x text-white"></i>
+                </div>
+                <h3>New Gas Product</h3>
+                <p class="mb-0">Enter gas product details below</p>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Category</label>
-                <select name="category" class="form-select" required>
-                    <option value="Industrial">Industrial</option>
-                    <option value="Commercial">Commercial</option>
-                    <option value="Medical">Medical</option>
-                </select>
-            </div>
+            <div class="form-body">
+                <form method="post" action="" id="addGasForm">
+                    {% csrf_token %}
 
-            <div class="mb-3">
-                <label class="form-label">Quantity</label>
-                <input type="number" name="quantity" class="form-control" min="1" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">weight</label>
-                <input type="number" name="weight" class="form-control" min="5" required>
-            </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-tag"></i> Gas Name
+                        </label>
+                        <i class="fas fa-flask input-icon"></i>
+                        <input type="text" name="name" class="form-control" required
+                               placeholder="Enter gas product name">
+                    </div>
 
-            <div class="mb-3">
-                <label class="form-label">Retailer Price</label>
-                <input type="text" name="retailer_price" class="form-control" required>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-layer-group"></i> Category
+                        </label>
+                        <i class="fas fa-th-large input-icon"></i>
+                        <select name="category" class="form-select" required>
+                            <option value="" disabled selected>Select category</option>
+                            <option value="Industrial">Industrial</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Medical">Medical</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-cubes"></i> Quantity
+                                </label>
+                                <i class="fas fa-box input-icon"></i>
+                                <input type="number" name="quantity" class="form-control" 
+                                       min="1" required placeholder="Enter quantity">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-weight"></i> Weight (kg)
+                                </label>
+                                <i class="fas fa-balance-scale input-icon"></i>
+                                <input type="number" name="weight" class="form-control" 
+                                       min="5" required placeholder="Enter weight">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-rupee-sign"></i> Retailer Price
+                        </label>
+                        <i class="fas fa-tag input-icon"></i>
+                        <input type="text" name="retailer_price" class="form-control" 
+                               required placeholder="Enter price">
+                    </div>
+
+                    <button type="submit" class="btn btn-add">
+                        <i class="fas fa-plus-circle me-2"></i>Add Gas Product
+                    </button>
+
+                    <a href="{% url 'Admin:view_gas' %}" class="btn btn-view">
+                        <i class="fas fa-list me-2"></i>View All Gas Products
+                    </a>
+
+                    <div class="last-updated">
+                        Last updated: {{ current_date }}
+                    </div>
+                </form>
             </div>
-
-            <button type="submit" class="btn btn-primary">Add Gas Product</button>
-        </form>
-
-        <a href="{% url 'Admin:view_gas' %}" class="btn btn-secondary mt-3">View All Gas Products</a>
+        </div>
     </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Form submission animation
+        document.getElementById('addGasForm').addEventListener('submit', function(e) {
+            const button = this.querySelector('button[type="submit"]');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding Product...';
+            button.disabled = true;
+        });
+
+        // Add animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const formCard = document.querySelector('.add-gas-card');
+            formCard.style.opacity = '0';
+            formCard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                formCard.style.transition = 'all 0.5s ease';
+                formCard.style.opacity = '1';
+                formCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
 </body>
 </html>

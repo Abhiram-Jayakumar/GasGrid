@@ -82,7 +82,12 @@ def login(request):
 #/////////////////////////////////////////////////////////////////////////////////////////
 
 def user_home(request):
-    return render(request, "User/user_home.html")
+    if 'uid' not in request.session:
+        messages.error(request, "You must be logged in!")
+        return redirect("User:login")
+
+    user = User.objects.get(id=request.session['uid'])
+    return render(request, "User/user_home.html", {"user": user})
 
 
 #////////////////////////////////////////////////////////////////////////////////
@@ -308,7 +313,6 @@ def pay_now(request, booking_id):
     booking = get_object_or_404(UserProductBooking, id=booking_id, user_id=request.session['uid'])
 
     if request.method == "POST":
-        # Simulating a successful payment (You can integrate Razorpay, Stripe, or PayPal here)
         booking.payment_status = "Paid"
         booking.save()
         messages.success(request, "Payment successful! Your order is confirmed.")

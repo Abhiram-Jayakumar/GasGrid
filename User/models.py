@@ -59,7 +59,7 @@ class UserProductBooking(models.Model):
     gas_product = models.ForeignKey(GasProduct, on_delete=models.CASCADE)  # Booked product
     quantity = models.PositiveIntegerField()  # Quantity booked
     booking_date = models.DateTimeField(auto_now_add=True)  # Booking date
-    booking_status = models.CharField(max_length=20, choices=BOOKING_STATUS_CHOICES, default='Pending')
+    booking_status = models.CharField(max_length=20, choices=BOOKING_STATUS_CHOICES, default='confirmed')
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='Pending')
 
     def total_price(self):
